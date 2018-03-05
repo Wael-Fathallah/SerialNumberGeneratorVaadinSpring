@@ -11,15 +11,13 @@ public class Serial {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Size(min = 10, max = 20, message = "Not Valid Serial")
     private  String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "set_id")
     private Set set;
 
-
-
+    //Getter & Setter
     public long getId() {
         return id;
     }

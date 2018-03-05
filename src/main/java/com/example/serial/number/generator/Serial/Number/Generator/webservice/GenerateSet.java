@@ -34,7 +34,6 @@ public class GenerateSet {
 
         return createSet(setName, set_size, serials, sets);
 
-
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)

@@ -29,47 +29,43 @@ public class SetsTableComponent extends FreemarkerLayout {
 
         this.sets = sets;
 
+        //Fill The Template table with dynamic value
         for (Set set : sets) {
             Button downloadButton = new Button("Get CSV");
             downloadButton.addStyleNames(ValoTheme.BUTTON_LINK);
 
+            //CSV Creator & Downloader
             final AdvancedFileDownloader downloader = new AdvancedFileDownloader();
-            downloader
-                    .addAdvancedDownloaderListener(new AdvancedFileDownloader.AdvancedDownloaderListener() {
+            downloader.addAdvancedDownloaderListener(downloadEvent -> {
 
-                        @Override
-                        public void beforeDownload(AdvancedFileDownloader.DownloaderEvent downloadEvent) {
+                        String outputFile = set.getName()+".csv";
 
-                            String outputFile = set.getName()+".csv";
-
-                            File outFile = new File(outputFile);
-                            if (outFile.exists()) {
-                                outFile.delete();
-                            }
-                            try {
-                                CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, false), ',');
-                                csvOutput.write("Id");
-                                csvOutput.write("Serial");
+                        File outFile = new File(outputFile);
+                        if (outFile.exists()) {
+                            outFile.delete();
+                        }
+                        try {
+                            CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, false), ',');
+                            csvOutput.write("Id");
+                            csvOutput.write("Serial");
+                            csvOutput.endRecord();
+                            for (Serial serial: set.getSerials()) {
+                                csvOutput.write(String.valueOf(serial.getId()));
+                                csvOutput.write(serial.getValue());
                                 csvOutput.endRecord();
-                                for (Serial serial: set.getSerials()) {
-                                    csvOutput.write(String.valueOf(serial.getId()));
-                                    csvOutput.write(serial.getValue());
-                                    csvOutput.endRecord();
-                                }
-                                csvOutput.close();
-
-                                downloader.setFilePath(outputFile);
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
+                            csvOutput.close();
 
+                            downloader.setFilePath(outputFile);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
 
                     });
-
             downloader.extend(downloadButton);
 
+            //Insert Button In table row
             addComponent(downloadButton, "download-button-" + set.getId());
         }
     }

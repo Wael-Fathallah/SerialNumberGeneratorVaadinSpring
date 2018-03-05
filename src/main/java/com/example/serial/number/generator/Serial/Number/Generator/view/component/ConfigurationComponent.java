@@ -1,6 +1,5 @@
 package com.example.serial.number.generator.Serial.Number.Generator.view.component;
 
-
 import com.example.serial.number.generator.Serial.Number.Generator.model.Type;
 import com.vaadin.ui.*;
 
@@ -11,7 +10,9 @@ public class ConfigurationComponent  extends VerticalLayout {
     public CheckBox upperCase;
     private TextField exception;
 
+    //Create Configuration Form
     public ConfigurationComponent(){
+
         Label title = new Label("Configuration");
         number = new CheckBox("Numbers");
         lowerCase = new CheckBox("Lower Case");
@@ -25,6 +26,8 @@ public class ConfigurationComponent  extends VerticalLayout {
         addComponents(exception);
         number.setValue(true);
     }
+
+    //Public method to return the configuration
     public Type getConfiguration(){
         Type type = new Type();
         if (!lowerCase.getValue() && !upperCase.getValue() && !number.getValue() ){

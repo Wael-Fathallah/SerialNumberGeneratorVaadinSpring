@@ -20,6 +20,7 @@ public class Type {
 
     private String exception = "";
 
+    //Getter & Setter
     public void setException(String exception) {
         this.exception = exception;
     }
@@ -64,10 +65,5 @@ public class Type {
         }
         return list;
     }
-
-    public void setException(List<Character> exception) {
-        this.exception = String.valueOf(exception);
-    }
-
 
 }

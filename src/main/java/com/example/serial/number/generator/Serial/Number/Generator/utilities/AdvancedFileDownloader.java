@@ -12,7 +12,6 @@ import com.vaadin.server.DownloadStream;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinRequest;
@@ -21,9 +20,6 @@ import com.vaadin.ui.AbstractComponent;
 
 public class AdvancedFileDownloader extends FileDownloader {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 7914516170514586601L;
     private static final boolean DEBUG_MODE = true;
 

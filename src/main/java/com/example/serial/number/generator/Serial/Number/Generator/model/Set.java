@@ -26,6 +26,7 @@ public class Set {
     private Type type;
 
 
+    //Getter & Setter
     public long getId() {
         return id;
     }
