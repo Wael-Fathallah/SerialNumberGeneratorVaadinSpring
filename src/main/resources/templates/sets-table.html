@@ -1,0 +1,37 @@
+<div id="sets" class="container-serial" style="display: none">
+    <div class="wrap-table100">
+        <div class="table100 ver1 m-b-0" style="width: 100%">
+            <div class="table100-head" style="width: 100%">
+                <table>
+                    <thead>
+                    <tr class="row100 head">
+                        <th class=" column1">Name</th>
+                        <th class=" column">Quantity</th>
+                        <th class=" action-column">Action</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="table100-body">
+                <table>
+                    <tbody>
+                    <#list sets as set>
+                    <tr class="row100 body">
+                        <td class=" column1">${set.name}</td>
+                        <td class=" column">${set.unit}</td>
+                        <td class=" action-column"><span location="download-button-${set.id}"></span></td>
+                    </tr>
+                    </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.$(document).ready(function () {
+        var sets = window.$("#sets");
+        sets.css("display", "");
+    });
+</script>
