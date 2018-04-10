@@ -3,6 +3,7 @@ package com.example.serial.number.generator.Serial.Number.Generator.model;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,10 @@ public class Set {
     private List<Serial> serials = new ArrayList<>();
 
     private int unit;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created")
+    private Date created = new Date();
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="type_id")
@@ -65,5 +70,13 @@ public class Set {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

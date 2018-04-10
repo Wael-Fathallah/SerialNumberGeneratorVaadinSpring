@@ -17,10 +17,10 @@ import java.io.*;
 
 @RestController
 @RequestMapping("/csv")
-public class CSVService {
+public class CSVAPI {
     private final SetService setService;
 
-    public CSVService(final SetService setService) {
+    public CSVAPI(final SetService setService) {
         this.setService = setService;
     }
 

@@ -7,6 +7,7 @@ import com.example.serial.number.generator.Serial.Number.Generator.service.Seria
 import com.example.serial.number.generator.Serial.Number.Generator.service.SetService;
 import com.example.serial.number.generator.Serial.Number.Generator.utilities.Constant;
 import com.example.serial.number.generator.Serial.Number.Generator.utilities.SerialFactory;
+import com.example.serial.number.generator.Serial.Number.Generator.utilities.SerialFactoryRunnable;
 import com.example.serial.number.generator.Serial.Number.Generator.webservice.request.CreateSetModel;
 
 import org.springframework.http.MediaType;
@@ -16,12 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/generate")
-public class GenerateSet {
+public class GenerateSetAPI {
 
     private final SetService setService;
     private final SerialService serialService;
 
-    public GenerateSet(final SetService setService, final SerialService serialService) {
+    public GenerateSetAPI(final SetService setService, final SerialService serialService) {
         this.setService = setService;
         this.serialService = serialService;
     }
@@ -49,6 +50,19 @@ public class GenerateSet {
 
     }
 
+    @PostMapping(value = "/background", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String createSetBK(@RequestBody CreateSetModel createSetModel) {
+
+        List<Serial> serials = this.serialService.getAllSerial();
+        List<Set> sets = this.setService.getAllSet();
+
+        int set_size = createSetModel.getSetSize();
+        String setName = createSetModel.getSetName();
+
+        return createSetBK(setName, set_size, serials, sets);
+
+    }
+
     private String createSet(String setName, int set_size, List<Serial> serials, List<Set> sets) {
         if ( (serials.size() + set_size) <= Constant.SERIAL_GENERATED_LIMIT ){
             if (!setExists(sets, setName)){
@@ -65,6 +79,27 @@ public class GenerateSet {
                 {
                     return "Failed " + setName + " : " + set_size;
                 }
+            } else {
+                return "Failed : Set Name Already Exist";
+            }
+
+        } else {
+            return "Failed : You reach the limit of generated serial " + Constant.SERIAL_GENERATED_LIMIT;
+        }
+    }
+    private String createSetBK(String setName, int set_size, List<Serial> serials, List<Set> sets) {
+        if ( (serials.size() + set_size) <= Constant.SERIAL_GENERATED_LIMIT ){
+            if (!setExists(sets, setName)){
+                Set set = new Set();
+                set.setName(setName);
+                set.setUnit(set_size);
+                Type type = new Type();
+                set.setType(type);
+
+                SerialFactoryRunnable sfr = new SerialFactoryRunnable(set, 12, this.serialService.getAllSerial(), set_size, this.setService );
+                Thread thread = new Thread(sfr);
+                thread.start();
+                return "Set Will Created in Background";
             } else {
                 return "Failed : Set Name Already Exist";
             }

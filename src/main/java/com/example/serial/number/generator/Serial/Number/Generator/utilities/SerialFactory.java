@@ -5,10 +5,11 @@ import com.example.serial.number.generator.Serial.Number.Generator.model.Set;
 import com.example.serial.number.generator.Serial.Number.Generator.model.Type;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class SerialFactory {
+public class SerialFactory implements Runnable {
 
     private static SerialFactory self;
 
@@ -26,7 +27,8 @@ public class SerialFactory {
 
     //Public Method to Generate a bundle of serial
     public List<Serial> generateSetOfSerial(Set set, int length, List<Serial> notAlowed){
-        List<String> notAlowedS = new ArrayList<>();
+//        List<String> notAlowedS = new ArrayList<>();
+        HashSet notAlowedS = new HashSet<String>();
         for (Serial serial : notAlowed){
             notAlowedS.add(serial.getValue());
         }
@@ -46,17 +48,29 @@ public class SerialFactory {
         List<Serial> serials = new ArrayList<>();
         while (outCounterPosition < outCounter && generatedKeyPosition < size){
             String generated = generate(pattern.value, length);
-            if (notAlowedS.contains(generated)){
-                outCounterPosition++;
-            }else {
+            if (notAlowedS.add(generated)){
+
                 outCounterPosition = 0;
                 generatedKeyPosition++;
                 Serial serial = new Serial();
                 serial.setValue(generated);
                 serial.setSet(set);
                 serials.add(serial);
-                notAlowedS.add(generated);
+            } else {
+                System.out.print("::: DUPLIC :::");
+                outCounterPosition++;
             }
+//            if (notAlowedS.contains(generated)){
+//                outCounterPosition++;
+//            }else {
+//                outCounterPosition = 0;
+//                generatedKeyPosition++;
+//                Serial serial = new Serial();
+//                serial.setValue(generated);
+//                serial.setSet(set);
+//                serials.add(serial);
+//                notAlowedS.add(generated);
+//            }
 
             System.out.println(generatedKeyPosition+" : "+generated);
         }
@@ -99,6 +113,11 @@ public class SerialFactory {
         toReturn.size = list.size();
         toReturn.value = sb.toString();
         return toReturn;
+    }
+
+    @Override
+    public void run() {
+
     }
 
     //Inner Class (Pattern Struct)
